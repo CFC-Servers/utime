@@ -62,6 +62,8 @@ function think()
 	gpanel.playerInfo.total:SetTextColor( insideTextColor )
 	gpanel.playerInfo.session:SetTextColor( insideTextColor )
 	gpanel.playerInfo.nick:SetTextColor( insideTextColor )
+
+	gpanel:SlowThink()
 end
 timer.Create( "UTimeThink", 0.6, 0, think )
 
@@ -154,7 +156,7 @@ end
 --	 Name: Think
 -----------------------------------------------------------
 local locktime = 0
-function PANEL:Think()
+function PANEL:SlowThink()
 	if self.Size == self.Small then
 		self.playerInfo:SetVisible( false )
 	else
