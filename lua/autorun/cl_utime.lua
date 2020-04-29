@@ -5,7 +5,7 @@ if not CLIENT then return end
 local gpanel
 
 --Now convars!
-local utime_enable = CreateClientConVar( "utime_enable", "1.0", true, false )
+local utime_enable = CreateClientConVar( "utime_enable", "0", true, false )
 local utime_outsidecolor_r = CreateClientConVar( "utime_outsidecolor_r", "256.0", true, false )
 local utime_outsidecolor_g = CreateClientConVar( "utime_outsidecolor_g", "256.0", true, false )
 local utime_outsidecolor_b = CreateClientConVar( "utime_outsidecolor_b", "256.0", true, false )
@@ -42,6 +42,7 @@ function think()
 	if not utime_enable:GetBool() or not IsValid( LocalPlayer() ) or
 			(IsValid( LocalPlayer():GetActiveWeapon() ) and LocalPlayer():GetActiveWeapon():GetClass() == "gmod_camera") then
 		gpanel:SetVisible( false )
+		return
 	else
 		gpanel:SetVisible( true )
 	end
