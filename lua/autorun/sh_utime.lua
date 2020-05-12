@@ -1,6 +1,5 @@
 -- Written by Team Ulysses, http://ulyssesmod.net/
 AddCSLuaFile( "autorun/sh_utime.lua" )
-AddCSLuaFile( "autorun/cl_utime.lua" )
 
 module( "Utime", package.seeall )
 
