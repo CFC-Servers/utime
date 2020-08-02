@@ -12,27 +12,40 @@ end
 function onJoin( ply )
 	local uid = ply:UniqueID()
 	local row = sql.QueryRow( "SELECT totaltime, lastvisit FROM utime WHERE player = " .. uid .. ";" )
-	local time = 0 
+	local time = 0
 
 	if row then
 		if utime_welcome:GetBool() then
-			ULib.tsay( ply, "[UTime]Welcome back " .. ply:Nick() .. ", you last played on this server " .. os.date( "%c", row.lastvisit ) )
+			ULib.tsay( ply, "[UTime] Welcome back " .. ply:Nick() .. ", you last played on this server " .. os.date( "%c", row.lastvisit ) )
 		end
 		sql.Query( "UPDATE utime SET lastvisit = " .. os.time() .. " WHERE player = " .. uid .. ";" )
 		time = row.totaltime
 	else
 		if utime_welcome:GetBool() then
-			ULib.tsay( ply, "[UTime]Welcome to our server " .. ply:Nick() .. "!" )
+			ULib.tsay( ply, "[UTime] Welcome to our server " .. ply:Nick() .. "!" )
 		end
 		sql.Query( "INSERT into utime ( player, totaltime, lastvisit ) VALUES ( " .. uid .. ", 0, " .. os.time() .. " );" )
 	end
 	ply:SetUTime( time )
 	ply:SetUTimeStart( CurTime() )
 end
-hook.Add( "PlayerInitialSpawn", "UTimeInitialSpawn", onJoin )
+hook.Add( "PlayerInitialSpawn", "UTimeInitialSpawn", function( ply )
+    timer.Simple( 20, function() onJoin(ply) end )
+end )
 
 function updatePlayer( ply )
-	sql.Query( "UPDATE utime SET totaltime = " .. math.floor( ply:GetUTimeTotalTime() ) .. " WHERE player = " .. ply:UniqueID() .. ";" )
+    local totalTime = ply:GetUTimeTotalTime()
+    if totalTime == nil then
+        print("[UTime] Got nil for current time when trying to update total time for player: " .. ply:Nick() .. " (" .. ply:SteamID64() .. " | " .. ply:UniqueID() .. ")")
+        return
+    end
+
+    if not ply:IsConnected() then
+        print("[UTime] Tried to update a player that wasn't fully connected yet!")
+        return
+    end
+
+	sql.Query( "UPDATE utime SET totaltime = " .. math.floor( totalTime ) .. " WHERE player = " .. ply:UniqueID() .. ";" )
 end
 hook.Add( "PlayerDisconnected", "UTimeDisconnect", updatePlayer )
 
