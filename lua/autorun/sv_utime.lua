@@ -29,7 +29,7 @@ function onJoin( ply )
 	ply:SetUTime( time )
 	ply:SetUTimeStart( CurTime() )
 end
-hook.Add( "PlayerInitialSpawn", "UTimeInitialSpawn", onJoin )
+hook.Add( "PlayerFullLoad", "UTimeInitialSpawn", onJoin )
 
 function updatePlayer( ply )
 	sql.Query( "UPDATE utime SET totaltime = " .. math.floor( ply:GetUTimeTotalTime() ) .. " WHERE player = " .. ply:UniqueID() .. ";" )
