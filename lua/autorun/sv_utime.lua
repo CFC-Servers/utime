@@ -2,6 +2,8 @@
 module( "Utime", package.seeall )
 if not SERVER then return end
 
+require( "playerload" )
+
 utime_welcome = CreateConVar( "utime_welcome", "1", FCVAR_ARCHIVE )
 
 if not sql.TableExists( "utime" ) then
